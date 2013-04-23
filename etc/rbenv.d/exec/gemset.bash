@@ -9,13 +9,20 @@ fi
 OLDIFS="$IFS"
 IFS=$' \t\n'
 for gemset in $(rbenv-gemset active 2>/dev/null); do
-  path="${RBENV_GEMSET_ROOT}/$gemset"
-  PATH="$path/bin:$PATH"
-  if [ -z "$GEM_HOME" ]; then
-    GEM_HOME="$path"
-    GEM_PATH="$path"
+  if [ $gemset = "__DEFAULT__" ]; then
+    # to avoid infinite loop by evaluating recursively
+    default_gem_path=`RBENV_GEMSETS=" " gem env gempath`
+    GEM_PATH="$GEM_PATH:$default_gem_path"
   else
-    GEM_PATH="$GEM_PATH:$path"
+    path="${RBENV_GEMSET_ROOT}/$gemset"
+    if [ -z "$GEM_HOME" ]; then
+      GEM_HOME="$path"
+    fi
+    if [ -z "$GEM_PATH" ]; then
+      GEM_PATH=$path
+    else
+      GEM_PATH="$GEM_PATH:$path"
+    fi
   fi
 done
 IFS="$OLDIFS"
