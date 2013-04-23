@@ -1,3 +1,7 @@
+** Fork of jamis/rbenv-gemset with merged pull 32 and 33. **
+
+
+
 # rbenv-gemset
 
 rbenv-gemset is an extension for the [rbenv][rbenv] ruby version manager that
